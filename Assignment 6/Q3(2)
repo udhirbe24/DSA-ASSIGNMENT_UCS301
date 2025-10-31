@@ -1,0 +1,52 @@
+#include <iostream>
+using namespace std;
+// Node structure for Circular Linked List
+struct Node {
+ int data;
+ Node* next;
+};
+// FuncƟon to create a new node
+Node* createNode(int value) {
+ Node* newNode = new Node();
+ newNode->data = value;
+ newNode->next = NULL;
+ return newNode;
+}
+// FuncƟon to insert node at end
+void insertEnd(Node*& head, int value) {
+ Node* newNode = createNode(value);
+ if (head == NULL) {
+ head = newNode;
+ newNode->next = head; // circular link
+ return;
+ }
+ Node* temp = head;
+ while (temp->next != head)
+ temp = temp->next;
+ temp->next = newNode;
+ newNode->next = head; // make it circular
+ 
+}
+// FuncƟon to find size of Circular Linked List
+int sizeOfCircularList(Node* head) {
+ if (head == NULL)
+ return 0;
+ int count = 0;
+ Node* temp = head;
+ do {
+ count++;
+ temp = temp->next;
+ } while (temp != head);
+ return count;
+}
+// Main funcƟon
+int main() {
+ Node* head = NULL;
+ // Example input: 20 → 100 → 40 → 80 → 60
+ insertEnd(head, 20);
+ insertEnd(head, 100);
+ insertEnd(head, 40);
+ insertEnd(head, 80);
+ insertEnd(head, 60);
+ cout << "Size of Circular Linked List: " << sizeOfCircularList(head) << endl;
+ return 0;} 

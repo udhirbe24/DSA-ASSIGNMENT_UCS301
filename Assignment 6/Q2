@@ -1,0 +1,57 @@
+#include <iostream>
+using namespace std;
+// Node structure
+struct Node {
+ int data;
+ Node* next;
+};
+// FuncƟon to create a new node
+Node* createNode(int value) {
+ Node* newNode = new Node();
+ newNode->data = value;
+ newNode->next = NULL;
+ return newNode;
+}
+// FuncƟon to insert at end (to build the circular list)
+void insertEnd(Node*& head, int value) {
+ 
+ Node* newNode = createNode(value);
+ if (head == NULL) {
+ head = newNode;
+ newNode->next = head; // Points to itself (circular)
+ return;
+ }
+ Node* temp = head;
+ while (temp->next != head)
+ temp = temp->next;
+ temp->next = newNode;
+ newNode->next = head; // Complete the circle
+}
+// FuncƟon to display circular linked list (repeat head at end)
+void displayCircularList(Node* head) {
+ if (head == NULL) {
+ cout << "List is empty.\n";
+ return;
+ }
+ Node* temp = head;
+ do {
+ cout << temp->data << " ";
+ temp = temp->next;
+ } while (temp != head);
+ // Repeat the head node value at the end
+ cout << head->data << endl;
+}
+// Main funcƟon
+int main() {
+ 
+ Node* head = NULL;
+ // Input: 20 → 100 → 40 → 80 → 60
+ insertEnd(head, 20);
+ insertEnd(head, 100);
+ insertEnd(head, 40);
+ insertEnd(head, 80);
+ insertEnd(head, 60);
+ cout << "Circular Linked List (with head repeated at end):\n";
+ displayCircularList(head);
+ return 0;
+}

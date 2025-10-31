@@ -1,0 +1,50 @@
+#include <iostream>
+using namespace std;
+// Node structure for Doubly Linked List
+struct Node {
+ int data;
+ Node* prev;
+ Node* next;
+};
+// FuncƟon to create a new node
+Node* createNode(int value) {
+ Node* newNode = new Node();
+ newNode->data = value;
+ newNode->prev = newNode->next = NULL;
+ return newNode;
+}
+// FuncƟon to insert node at end
+void insertEnd(Node*& head, int value) {
+ Node* newNode = createNode(value);
+ if (head == NULL) {
+ head = newNode;
+ return;
+ }
+ Node* temp = head;
+ while (temp->next)
+ temp = temp->next;
+ temp->next = newNode;
+ newNode->prev = temp;
+ 
+}
+// FuncƟon to find size of Doubly Linked List
+int sizeOfDoublyList(Node* head) {
+ int count = 0;
+ Node* temp = head;
+ while (temp) {
+ count++;
+ temp = temp->next;
+ }
+ return count;
+}
+// Main funcƟon
+int main() {
+ Node* head = NULL;
+ // Example input: 10 → 20 → 30 → 40
+ insertEnd(head, 10);
+ insertEnd(head, 20);
+ insertEnd(head, 30);
+ insertEnd(head, 40);
+ cout << "Size of Doubly Linked List: " << sizeOfDoublyList(head) << endl;
+ return 0;
+}

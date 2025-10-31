@@ -1,0 +1,58 @@
+#include <iostream>
+using namespace std;
+// Node structure for singly linked list
+struct Node {
+ int data;
+ Node* next;
+};
+// FuncƟon to create a new node
+Node* createNode(int value) {
+ Node* newNode = new Node();
+ newNode->data = value;
+ newNode->next = NULL;
+ 
+ return newNode;
+}
+// FuncƟon to insert node at end
+void insertEnd(Node*& head, int value) {
+ Node* newNode = createNode(value);
+ if (head == NULL) {
+ head = newNode;
+ return;
+ }
+ Node* temp = head;
+ while (temp->next != NULL)
+ temp = temp->next;
+ temp->next = newNode;
+}
+// FuncƟon to check if linked list is circular
+bool isCircular(Node* head) {
+ if (head == NULL)
+ return false;
+ Node* temp = head->next;
+ while (temp != NULL && temp != head)
+ temp = temp->next;
+ return (temp == head);
+}
+// Main funcƟon
+int main() {
+ Node* head = NULL;
+ // Example Input: 2 -> 4 -> 6 -> 7 -> 5
+ insertEnd(head, 2);
+ 
+ insertEnd(head, 4);
+ insertEnd(head, 6);
+ insertEnd(head, 7);
+ insertEnd(head, 5);
+ // Making the list circular manually (5 -> points back to head)
+ Node* temp = head;
+ while (temp->next != NULL)
+ temp = temp->next;
+ temp->next = head; // Makes list circular
+ // Checking if circular
+ if (isCircular(head))
+ cout << "Output: True\n";
+ else
+ cout << "Output: False\n";
+ return 0;
+}

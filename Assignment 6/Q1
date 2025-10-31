@@ -1,0 +1,309 @@
+#include <iostream>
+using namespace std;
+// ---------------------- CIRCULAR LINKED LIST ----------------------
+class CircularLinkedList {
+ struct Node {
+ int data;
+ Node *next;
+ };
+ Node *head;
+public:
+ CircularLinkedList() { head = NULL; }
+ // Insert at beginning, end, or aŌer a specific node
+ void insert(int value, int pos = -1, int aŌer = -1) {
+ Node *newNode = new Node();
+ newNode->data = value;
+ newNode->next = NULL;
+ // Case 1: Empty list
+ if (!head) {
+ newNode->next = newNode;
+ head = newNode;
+ cout << "Inserted " << value << " as first node.\n";
+ return;
+ }
+ Node *temp = head;
+ if (pos == 0) { // Insert at beginning
+ while (temp->next != head)
+ temp = temp->next;
+ temp->next = newNode;
+
+ newNode->next = head;
+ head = newNode;
+ }
+ else if (pos == 1) { // Insert at end
+ while (temp->next != head)
+ temp = temp->next;
+ temp->next = newNode;
+ newNode->next = head;
+ }
+ else if (aŌer != -1) { // Insert aŌer a specific node
+ do {
+ if (temp->data == aŌer) {
+ newNode->next = temp->next;
+ temp->next = newNode;
+ cout << "Inserted " << value << " aŌer " << aŌer << ".\n";
+ return;
+ }
+ temp = temp->next;
+ } while (temp != head);
+ cout << "Node " << aŌer << " not found.\n";
+ delete newNode;
+ return;
+ }
+ cout << "Inserted " << value << " successfully.\n";
+ }
+ // Delete a node with specific value
+ void deleteNode(int key) {
+ if (!head) {
+ 
+ cout << "List is empty.\n";
+ return;
+ }
+ Node *curr = head, *prev = NULL;
+ // Case: deleƟng head
+ if (head->data == key) {
+ Node *temp = head;
+ while (temp->next != head)
+ temp = temp->next;
+ if (head == head->next) {
+ delete head;
+ head = NULL;
+ } else {
+ temp->next = head->next;
+ Node *toDelete = head;
+ head = head->next;
+ delete toDelete;
+ }
+ cout << "Deleted " << key << ".\n";
+ return;
+ }
+ do {
+ prev = curr;
+ curr = curr->next;
+ if (curr->data == key) {
+ prev->next = curr->next;
+ delete curr;
+ cout << "Deleted " << key << ".\n";
+ 
+ return;
+ }
+ } while (curr != head);
+ cout << "Node " << key << " not found.\n";
+ }
+ // Search for a node
+ void search(int key) {
+ if (!head) {
+ cout << "List empty.\n";
+ return;
+ }
+ Node *temp = head;
+ int pos = 1;
+ do {
+ if (temp->data == key) {
+ cout << "Node " << key << " found at posiƟon " << pos << ".\n";
+ return;
+ }
+ temp = temp->next;
+ pos++;
+ } while (temp != head);
+ cout << "Node " << key << " not found.\n";
+ }
+ // Display list
+ void display() {
+ if (!head) {
+ cout << "List empty.\n";
+ return;
+ 
+ }
+ Node *temp = head;
+ cout << "Circular List: ";
+ do {
+ cout << temp->data << " ";
+ temp = temp->next;
+ } while (temp != head);
+ cout << endl;
+ }
+};
+// ---------------------- DOUBLY LINKED LIST ----------------------
+class DoublyLinkedList {
+ struct Node {
+ int data;
+ Node *prev, *next;
+ };
+ Node *head;
+public:
+ DoublyLinkedList() { head = NULL; }
+ // Insert at beginning, end, or aŌer a specific node
+ void insert(int value, int pos = -1, int aŌer = -1) {
+ Node *newNode = new Node();
+ newNode->data = value;
+ newNode->prev = newNode->next = NULL;
+ if (!head) {
+ head = newNode;
+ cout << "Inserted " << value << " as first node.\n";
+ return;
+ 
+ }
+ if (pos == 0) { // Insert at beginning
+ newNode->next = head;
+ head->prev = newNode;
+ head = newNode;
+ }
+ else if (pos == 1) { // Insert at end
+ Node *temp = head;
+ while (temp->next)
+ temp = temp->next;
+ temp->next = newNode;
+ newNode->prev = temp;
+ }
+ else if (aŌer != -1) { // Insert aŌer specific node
+ Node *temp = head;
+ while (temp && temp->data != aŌer)
+ temp = temp->next;
+ if (!temp) {
+ cout << "Node " << aŌer << " not found.\n";
+ delete newNode;
+ return;
+ }
+ newNode->next = temp->next;
+ if (temp->next)
+ temp->next->prev = newNode;
+ temp->next = newNode;
+ newNode->prev = temp;
+ }
+ 
+ cout << "Inserted " << value << " successfully.\n";
+ }
+ // Delete specific node
+ void deleteNode(int key) {
+ if (!head) {
+ cout << "List empty.\n";
+ return;
+ }
+ Node *temp = head;
+ while (temp && temp->data != key)
+ temp = temp->next;
+ if (!temp) {
+ cout << "Node " << key << " not found.\n";
+ return;
+ }
+ if (temp == head)
+ head = temp->next;
+ if (temp->next)
+ temp->next->prev = temp->prev;
+ if (temp->prev)
+ temp->prev->next = temp->next;
+ delete temp;
+ cout << "Deleted " << key << ".\n";
+ }
+ // Search
+ void search(int key) {
+ Node *temp = head;
+ 
+ int pos = 1;
+ while (temp) {
+ if (temp->data == key) {
+ cout << "Node " << key << " found at posiƟon " << pos << ".\n";
+ return;
+ }
+ temp = temp->next;
+ pos++;
+ }
+ cout << "Node " << key << " not found.\n";
+ }
+ // Display
+ void display() {
+ if (!head) {
+ cout << "List empty.\n";
+ return;
+ }
+ Node *temp = head;
+ cout << "Doubly List: ";
+ while (temp) {
+ cout << temp->data << " ";
+ temp = temp->next;
+ }
+ cout << endl;
+ }
+};
+// ---------------------- MAIN MENU ----------------------
+int main() {
+ 
+ CircularLinkedList cll;
+ DoublyLinkedList dll;
+ int choice, type, val, key;
+ while (true) {
+ cout << "\n=== LINKED LIST MENU ===\n";
+ cout << "1. Circular Linked List\n";
+ cout << "2. Doubly Linked List\n";
+ cout << "3. Exit\n";
+ cout << "Enter choice: ";
+ cin >> type;
+ if (type == 3) break;
+ cout << "\n1. Insert\n2. Delete\n3. Search\n4. Display\nEnter operaƟon: ";
+ cin >> choice;
+ if (type == 1) { // Circular
+ switch (choice) {
+ case 1:
+ cout << "Enter value: ";
+ cin >> val;
+ cout << "Insert (0=Start,1=End,2=AŌer specific)? ";
+ int posC;
+ cin >> posC;
+ if (posC == 2) {
+ cout << "AŌer which node? ";
+ cin >> key;
+ cll.insert(val, -1, key);
+ } else
+ cll.insert(val, posC);
+ break;
+ 
+ case 2:
+ cout << "Enter node to delete: ";
+ cin >> val;
+ cll.deleteNode(val);
+ break;
+ case 3:
+ cout << "Enter value to search: ";
+ cin >> val;
+ cll.search(val);
+ break;
+ case 4:
+ cll.display();
+ break;
+ }
+ } else if (type == 2) { // Doubly
+ switch (choice) {
+ case 1:
+ cout << "Enter value: ";
+ cin >> val;
+ cout << "Insert (0=Start,1=End,2=AŌer specific)? ";
+ int posD;
+ cin >> posD;
+ if (posD == 2) {
+ cout << "AŌer which node? ";
+ cin >> key;
+ dll.insert(val, -1, key);
+ } else
+ dll.insert(val, posD);
+ 
+ break;
+ case 2:
+ cout << "Enter node to delete: ";
+ cin >> val;
+ dll.deleteNode(val);
+ break;
+ case 3:
+ cout << "Enter value to search: ";
+ cin >> val;
+ dll.search(val);
+ break;
+ case 4:
+ dll.display();
+ break;
+ }
+ }
+ }
+ cout << "\nProgram exited.\n";
+ return 0;
+}
